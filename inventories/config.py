@@ -1,4 +1,4 @@
 Config={
-    'ubuntu_hosts':['172.20.91.26'],
-    'windows_hosts':[]
+    'ubuntu':['administrator@172.20.91.26'],
+    'windows':['gharaviyan-win@172.20.91.27']
 }

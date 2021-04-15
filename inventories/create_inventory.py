@@ -20,14 +20,18 @@ def create_inventory(host_dict: dict, variable_manager, loader,ansible_password)
         if key == "windows":
             data.set_variable(key, 'ansible_connection', 'winrm')
             data.set_variable(key, 'ansible_winrm_transport', 'ntlm')
+            data.set_variable(key,'ansible_winrm_scheme','http')
+            data.set_variable(key,'ansible_winrm_operation_timeout_sec',40)
+            data.set_variable(key,'ansible_winrm_read_timeout_sec',50)
             data.set_variable(key, 'ansible_winrm_server_cert_validation', 'ignore')
         else:
             data.set_variable(key, 'ansible_connection', 'ssh')
         for host in hosts:
-            data.add_host(host, group=key)
-            # data.set_variable(host, 'ansible_become_user','administrator')
-            # data.set_variable(host, 'ansible_become', 'yes')
-            # data.set_variable(host, 'ansible_become_password', 'Mp3b27')
+            data.add_host(host['host_ip'], group=key,port=host['connection_port'])
+            data.set_variable(host['host_ip'], 'user',host['username'])
+            data.set_variable(host['host_ip'], 'ansible_password',host['password'])
+            data.set_variable(host['host_ip'], 'ansible_user',host['username'])
+            data.set_variable(host['host_ip'], 'ansible_become_password',host['password'])
     data.reconcile_inventory()
     inventory = InventoryManager(loader=loader)
     inventory._inventory = data

@@ -1,0 +1,30 @@
+---
+-
+  name: Create symbolic link for python3
+  file:
+    src: "/usr/bin/python3"
+    dest: "/usr/bin/python"
+    state: link
+
+
+
+- 
+  name: install python tools
+  package:
+    name: python3-pip
+    state: present
+    update_cache: yes
+
+-
+  name: install django
+  pip:
+    name: django
+
+-
+  name: Mkdir Folder
+  command: mkdir test-ubuntu
+
+-
+  name: Create some files
+  command: touch test-ubuntu/text1.txt test-ubuntu/text2.txt test-ubuntu/text3.txt
+

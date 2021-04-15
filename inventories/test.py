@@ -155,6 +155,6 @@ class PackageInstallerTask():
         self.connection_port = connection_port
         self.connection_user = connection_user
         self.ansible_password=ansible_password
-        self._install(ip_address,group_name='ubuntu')
-
-PackageInstallerTask(Config).run(ip_address=Config['windows'][0],package='ping',connection_type='winrm',connection_user='gharaviyan-win',connection_port=22,ansible_password='Mp3b27')
+        self._install(ip_address)
+host=Config['windows'][0]
+PackageInstallerTask(Config).run(ip_address=host['host_ip'],package='ping',connection_type=host['connection_type'],connection_user=host['username'],connection_port=host['connection_port'],ansible_password=host['password'])

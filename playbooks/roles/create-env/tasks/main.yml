@@ -1,0 +1,62 @@
+---
+# tasks file for create-env
+
+
+- name: determine current user
+  command: whoami
+  register: _virtualenv_whoami_result
+  changed_when: false
+  check_mode: false
+
+- name: determine current user vs. actual user
+  set_fact:
+    _virtualenv_current_user: "{{ ansible_user | default(ansible_ssh_user, true) | default(ansible_user_id, true) | default(lookup('env', 'USER')) }}"
+    _virtualenv_actual_user: "{{ _virtualenv_whoami_result.stdout }}"
+
+- name: initialize default role variables
+  set_fact:
+    _virtualenv_path: "{{ virtualenv_path | mandatory }}"
+    _virtualenv_user: "{{ virtualenv_user | default(_virtualenv_current_user, true) }}"
+    _virtualenv_becoming: "{{ (_virtualenv_actual_user != _virtualenv_current_user or _virtualenv_actual_user == 'root') | bool }}"
+
+- name: install required os packages to create virtualenv
+  package:
+    name: "{{ item.name | default(item, true) }}"
+    state: "{{ item.state | default('present', true) }}"
+  with_items: "{{ virtualenv_default_os_packages[ansible_pkg_mgr | default(none, true)] | default([]) }}"
+  when: _virtualenv_becoming
+
+- name: install additional os packages to support virtualenv
+  package:
+    name: "{{ item.name | default(item, true) }}"
+    state: "{{ item.state | default('present', true) }}"
+  with_items: "{{ virtualenv_os_packages[ansible_pkg_mgr | default(none, true)] | default([]) }}"
+  when: _virtualenv_becoming
+
+- name: install global python packages with easy_install
+  easy_install:
+    executable: "{{ virtualenv_easy_install_executable | default(omit) }}"
+    name: "{{ item.name | default(item, true) }}"
+    state: "{{ item.state | default('present', true) }}"
+  with_items: "{{ virtualenv_easy_install_packages }}"
+  when: _virtualenv_becoming
+
+- name: install global python packages with pip
+  pip:
+    executable: "{{ virtualenv_pip_executable | default(omit) }}"
+    name: "{{ item.name | default(item, true) }}"
+    version: "{{ item.version | default(omit, true) }}"
+    state: "{{ item.state | default('present', true) }}"
+  with_items: "{{ virtualenv_global_packages }}"
+  when: _virtualenv_becoming
+
+- name: run update tasks with become
+  import_tasks: update.yml
+  when: _virtualenv_user != _virtualenv_actual_user
+  become: true
+  become_user: "{{ _virtualenv_user }}"
+
+- name: run update tasks without become
+  import_tasks: update.yml
+  when: _virtualenv_user == _virtualenv_actual_user
+  become: false

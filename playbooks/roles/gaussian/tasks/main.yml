@@ -1,0 +1,52 @@
+---
+- 
+  name: include
+  include: enviroment-variable.yml
+
+- 
+  name: create {{ G16ROOT }}/scr directory if it does not exist
+  file:
+    path: "{{ G16ROOT }}/scr"
+    state: directory
+    mode: 0755
+
+
+
+- 
+  name: extract G16-E01.tar.gz into {{ G16ROOT }}
+  command: "tar xvjf G16-A03-AVX2.tbz -C {{ G16ROOT }} warn=no"
+
+- 
+  name: change {{ GAUSS_EXEDIR }} folder permissions
+  file:
+    path: "{{ GAUSS_EXEDIR }}"
+    state: directory
+    recurse: yes
+    mode: 0700
+
+- 
+  name: adding gaussian alias to /root/.bashrc
+  lineinfile: 
+    path: /root/.bashrc 
+    regexp: "^alias gaussian"
+    line: "alias gaussian={{ GAUSS_EXEDIR }}/g16"
+    state: present
+
+#-
+#  name: copy GV6.tar.bz2
+#  copy:
+#    src: GV6.tar.bz2
+#    dest: /home
+#    mode: 0755
+#
+#-
+#  name: extract GV6.tar.bz2 into {{ G16ROOT }}
+#  command: "tar xvf /home/GV6.tar.bz2 -C {{ G16ROOT }} warn=no"
+#
+#-
+#  name: adding gauss-view alias to /root/.bashrc
+#  lineinfile:
+#    path: /root/.bashrc
+#    regexp: "^alias gauss-view"
+#    line: "alias gauss-view=sh {{ GAUSS_VIEW_EXEDIR }}/gv"
+#    state: present

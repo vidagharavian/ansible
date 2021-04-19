@@ -157,4 +157,4 @@ class PackageInstallerTask():
         self.ansible_password=ansible_password
         self._install(ip_address)
 host=Config['ubuntu'][0]
-PackageInstallerTask(Config).run(ip_address=host['host_ip'],package='rm_ssh_key',connection_type=host['connection_type'],connection_user=host['username'],connection_port=host['connection_port'],ansible_password=host['password'])
+PackageInstallerTask(Config).run(ip_address=host['host_ip'],package='gaussian',connection_type=host['connection_type'],connection_user=host['username'],connection_port=host['connection_port'],ansible_password=host['password'])

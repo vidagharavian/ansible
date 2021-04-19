@@ -1,0 +1,5 @@
+---
+  G09ROOT: "/opt/gaussian"
+  GAUSS_EXEDIR: "{{ G16ROOT }}/g16"
+  GAUSS_SCRDIR: "{{ G16ROOT }}/scr"
+  GAUSS_VIEW_EXEDIR: "{{ G16ROOT }}/gv"

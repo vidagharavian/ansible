@@ -1,0 +1,32 @@
+---
+- 
+  name: adding G16ROOT={{ G16ROOT }} in the bashrc files
+  lineinfile: 
+    path: /root/.bashrc 
+    regexp: "^export G16ROOT"
+    line: "export G16ROOT={{ G16ROOT }}"
+    state: present
+
+- 
+  name: adding GAUSS_EXEDIR={{ GAUSS_EXEDIR }} in the bashrc files
+  lineinfile: 
+    path: /root/.bashrc 
+    regexp: "^export GAUSS_EXEDIR"
+    line: "export GAUSS_EXEDIR={{ GAUSS_EXEDIR }}" 
+    state: present
+    
+- 
+  name: adding GAUSS_SCRDIR={{ GAUSS_SCRDIR }} in the bashrc files
+  lineinfile: 
+    path: /root/.bashrc 
+    regexp: "^export GAUSS_SCRDIR"
+    line: "export GAUSS_SCRDIR={{ GAUSS_SCRDIR }}" 
+    state: present
+
+- 
+  name: adding GAUSS_VIEW_EXEDIR={{ GAUSS_VIEW_EXEDIR }} in the bashrc files
+  lineinfile: 
+    path: /root/.bashrc 
+    regexp: "^export GAUSS_VIEW_EXEDIR"
+    line: "export GAUSS_VIEW_EXEDIR={{ GAUSS_VIEW_EXEDIR }}" 
+    state: present

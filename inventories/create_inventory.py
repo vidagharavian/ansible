@@ -37,4 +37,3 @@ def create_inventory(host_dict: dict, variable_manager, loader,ansible_password)
     inventory._inventory = data
     variable_manager.set_inventory(inventory)
     return inventory
-

@@ -1,0 +1,8 @@
+---
+- name: remove authorized keys
+  authorized_key:
+    user: ubuntu
+    state: absent
+    key: '{{ item }}'
+  with_file:
+    - ansible.pub

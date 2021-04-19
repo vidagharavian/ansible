@@ -88,7 +88,7 @@ class PackageInstallerTask():
 
     def _install(self,ip_address):
         # initialize needed objects
-        self.variable_manager_initialization(ip_address)
+        # self.variable_manager_initialization(ip_address)
         host_list = [ip_address]
         hosts = ','.join(host_list)
         if len(host_list) == 1:
@@ -103,9 +103,9 @@ class PackageInstallerTask():
         play_source = {
             'hosts': hosts,
             'gather_facts': True,
-            # 'become':True,
-            # 'become_user':'root',
-            # 'become_method':'sudo',
+            'become':True,
+            'become_user':'root',
+            'become_method':'sudo',
             'roles': package
         }
         passwords = dict()
@@ -156,5 +156,5 @@ class PackageInstallerTask():
         self.connection_user = connection_user
         self.ansible_password=ansible_password
         self._install(ip_address)
-host=Config['windows'][0]
-PackageInstallerTask(Config).run(ip_address=host['host_ip'],package='ping',connection_type=host['connection_type'],connection_user=host['username'],connection_port=host['connection_port'],ansible_password=host['password'])
+host=Config['ubuntu'][0]
+PackageInstallerTask(Config).run(ip_address=host['host_ip'],package='rm_ssh_key',connection_type=host['connection_type'],connection_user=host['username'],connection_port=host['connection_port'],ansible_password=host['password'])
